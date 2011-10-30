@@ -1,11 +1,8 @@
 #!/bin/bash
 
-#TODO: Aggiungere supporto al file di preferenza utente
-#source ~/.backup-tools.conf
-SORGENTE="/home/mbarbieri"	# Cosa copiare
-TARGET="/media/backup"		# Dove copiare
-EXCLUDE="/home/mbarbieri/.rsync/exclude"	# Lista file da escludere
-TAG="backup" # tag dei log scritti in /var/log/messages
+SYSCONF="/etc/backup-tools.conf"
+source $SYSCONF
+
 
 # VERIFICA CHE IL DISCO E' MONTATO
 MOUNTED=$(df | grep $TARGET |awk '{print $6}')
