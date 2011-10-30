@@ -3,8 +3,8 @@ Version: 0.0.1-1
 Section: base
 Priority: optional
 Architecture: all
-Depends: bash (>= 2.05a-11), rsync, logger
+Depends: bash (>= 2.05a-11), rsync
 Maintainer: Massimo Barbieri <massimo@fsfe.org>
-Description: Collections of backup's tools
+Description: Collections of tools for personal backup
  This package contains a collection of simple for making
  and checking your backup
