@@ -1,0 +1,26 @@
+#!/bin/bash
+
+#TODO: Aggiungere supporto al file di preferenza utente
+#source ~/.backup-tools.conf
+SORGENTE="/home/mbarbieri"	# Cosa copiare
+TARGET="/media/backup"		# Dove copiare
+EXCLUDE="/home/mbarbieri/.rsync/exclude"	# Lista file da escludere
+TAG="backup" # tag dei log scritti in /var/log/messages
+
+# VERIFICA CHE IL DISCO E' MONTATO
+MOUNTED=$(df | grep $TARGET |awk '{print $6}')
+
+if [ "$MOUNTED" == "$TARGET" ]
+then
+	echo "Il disco è montato: eseguo il backup"
+	logger `hostname` Inizio rsync di $SORGENTE -t $TAG
+	rsync -av --exclude-from=$EXCLUDE $SORGENTE $TARGET/
+	RSYNCERR=$?
+	logger Fine backup per `hostname` rsync ha restituito $RSYNCERR -t $TAG
+	exit 0
+else
+	echo "Il disco non è montato"
+	logger Impossibile eseguire il backup di `hostname` disco non montato -t $TAG
+	exit 1
+fi
+

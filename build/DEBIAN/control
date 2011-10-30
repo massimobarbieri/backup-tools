@@ -1,0 +1,9 @@
+Package: backup-tools
+Version: 0.0.1-1
+Section: base
+Priority: optional
+Architecture: all
+Depends: bash (>= 2.05a-11), rsync, logger
+Maintainer: Massimo Barbieri <massimo@fsfe.org>
+Description: Collections of backup's tools
+

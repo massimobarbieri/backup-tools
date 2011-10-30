@@ -1,0 +1,9 @@
+NAME: backup-tools
+
+AUTHOR: Massimo Barbieri <massimo@fsfe.org>
+
+DESCRIPTION:
+Collection of simple script for backup with rsync
+
+LICENSE:
+GPL v3 - see LICENSE
