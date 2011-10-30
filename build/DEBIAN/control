@@ -6,4 +6,5 @@ Architecture: all
 Depends: bash (>= 2.05a-11), rsync, logger
 Maintainer: Massimo Barbieri <massimo@fsfe.org>
 Description: Collections of backup's tools
-
+ This package contains a collection of simple for making
+ and checking your backup
