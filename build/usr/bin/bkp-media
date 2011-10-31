@@ -34,7 +34,17 @@ if [ "$MOUNTED" == "$TARGET" ]
 then
 	echo "Il disco è montato: eseguo il backup"
 	logger `hostname` Inizio rsync di $SORGENTE -t $TAG
-	rsync -av --exclude-from=$EXCLUDE $SORGENTE $TARGET/
+
+	# Opzione --delete
+	if [ "$1" == "--delete" ]
+	then
+		logger `hostname` richiesta opzione --delete
+		echo Eseguo il backup con --delete....
+		DELETE=$1
+	else
+		DELETE=""
+	fi
+	rsync -av $DELETE --exclude-from=$EXCLUDE $SORGENTE $TARGET/
 	RSYNCERR=$?
 	# Scrivo il log
 	logger Fine backup per `hostname` rsync ha restituito $RSYNCERR -t $TAG
