@@ -22,7 +22,17 @@
 ###########################################################################
 # Effettua il backup via ssh con rsync
 # TODO: Aggiungere supporto alla crittografia
+
 # Questo è il file di configurazione principale
-# TODO: Dovrei fare un file di configurazione utente
 SYSCONF="/etc/backup-tools.conf"
 source $SYSCONF
+
+
+
+
+# TODO: Controllare che il server sia accessibile
+# TODO: Aggiungere flag per supporto crittografia
+#	Andra a leggere le variavili sul file di conf
+
+# Comando di backup principale
+rsync -avz -e ssh $SORGENTE $USERNAME@$SERVER:$REMOTEDIR/
