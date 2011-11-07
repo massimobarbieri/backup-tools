@@ -44,7 +44,16 @@ then
 	else
 		DELETE=""
 	fi
-	rsync -av $DELETE --exclude-from=$EXCLUDE $SORGENTE $TARGET/
+
+	if [ $EXCLUDE ]
+	then
+		echo Eseguo con exclude
+		rsync -av $DELETE --exclude-from=$EXCLUDE $SORGENTE $TARGET/
+	else
+		echo Eseguo senza exclude
+		rsync -av $DELETE $SORGENTE $TARGET/
+	fi
+
 	RSYNCERR=$?
 	# Scrivo il log
 	logger Fine backup per `hostname` rsync ha restituito $RSYNCERR -t $TAG

@@ -46,6 +46,8 @@ smbmount $SAMBASHARE $SAMBAMOUNT -o credentials=$SAMBACREDENTIAL
 if mount|grep $SAMBAMOUNT
 then
 	logger `hostname` inizio il backup di $SORGENTE su $SAMBASHARE
+
+	#TODO: Aggiungere controllo su --exclude-from
 	rsync -av $SORGENTE $SAMBAMOUNT
 	RSYNCERR=$?
 	logger `hostname` fine backup di $SORGENTE su $SAMBASHARE rsync $RSYNCERR
