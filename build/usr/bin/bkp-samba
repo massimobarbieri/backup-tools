@@ -25,3 +25,30 @@
 # TODO: Dovrei fare un file di configurazione utente
 SYSCONF="/etc/backup-tools.conf"
 source $SYSCONF
+
+logger `hostname` esecuzione di bkp-samba -t $TAG 
+
+if [ -d $SAMBAMOUNT ]
+then
+        echo La directory nella quale montare il server è presente...
+        # Non fare niente
+else
+        echo Creo la directory nella quale montare il server
+        mkdir $SAMBAMOUNT
+fi
+
+logger `hostname` monto $SAMBASHARE
+
+# TODO: Aggiungere qualche controllo
+smbmount $SAMBASHARE $SAMBAMOUNT -o credentials=$SAMBACREDENTIAL
+
+
+if mount|grep $SAMBAMOUNT
+then
+	logger `hostname` inizio il backup di $SORGENTE su $SAMBASHARE
+	rsync -av $SORGENTE $SAMBAMOUNT
+	RSYNCERR=$?
+	logger `hostname` fine backup di $SORGENTE su $SAMBASHARE rsync $RSYNCERR
+
+	umount $SAMBAMOUNT
+fi
