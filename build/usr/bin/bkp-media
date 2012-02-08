@@ -35,7 +35,7 @@ if [ -f $USERCONF ]
 then
 	source $USERCONF
 else
-	cp /usr/share/backup-tools/backup-tools.conf ~/.backup-tools.conf
+	cp /usr/share/backup-tools/backup-tools.conf $USERCONF
 	if [ $? == 0 ]
 		then
 		echo "Please configure your $USERCONF"
