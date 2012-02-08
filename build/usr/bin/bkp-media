@@ -21,6 +21,11 @@
 # License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 ###########################################################################
 
+# Posizione del template dal quale viene generato il file utente
+# Si potrebbe prevedere un file di configurazione globale
+#CONFTEMPLATE="/usr/share/backup-tools/backup-tools.conf"
+source /etc/backup-tools.conf
+
 # L'opzione -u seguita dal nome utente deve essere aggiunta 
 # come prima opzione e permette di eseguire il programma usando
 # un'altra configurazione utente
@@ -35,7 +40,7 @@ if [ -f $USERCONF ]
 then
 	source $USERCONF
 else
-	cp /usr/share/backup-tools/backup-tools.conf $USERCONF
+	cp $CONFTEMPLATE $USERCONF
 	if [ $? == 0 ]
 		then
 		echo "Please configure your $USERCONF"
