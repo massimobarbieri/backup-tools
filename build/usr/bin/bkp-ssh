@@ -24,8 +24,24 @@
 # TODO: Aggiungere supporto alla crittografia
 
 # Questo è il file di configurazione principale
-SYSCONF="/etc/backup-tools.conf"
-source $SYSCONF
+if [ "$1" == "-u" ]
+then
+	USERCONF="/home/$2/.backup-tools.conf"
+else
+	USERCONF="~/.backup-tools.conf"
+fi
+
+if [ -f $USERCONF ]
+then
+	source $USERCONF
+else
+	cp /usr/share/backup-tools/backup-tools.conf ~/.backup-tools.conf
+	if [ $? == 0 ]
+		then
+		echo "Please configure your $USERCONF"
+	fi
+	exit 1
+fi
 
 
 

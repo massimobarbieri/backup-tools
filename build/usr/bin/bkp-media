@@ -22,8 +22,6 @@
 ###########################################################################
 
 # Questo è il file di configurazione principale
-# TODO: Dovrei fare un file di configurazione utente
-#SYSCONF="/etc/backup-tools.conf"
 if [ "$1" == "-u" ]
 then
 	USERCONF="/home/$2/.backup-tools.conf"
