@@ -24,14 +24,22 @@
 # Questo è il file di configurazione principale
 # TODO: Dovrei fare un file di configurazione utente
 #SYSCONF="/etc/backup-tools.conf"
-USERCONFTEMPLATE="/usr/share/backup-tools/backup-tools.conf"
-USERCONF="~/.backup-tools.conf"
+if [ "$1" == "-u" ]
+then
+	USERCONF="/home/$2/.backup-tools.conf"
+else
+	USERCONF="~/.backup-tools.conf"
+fi
+
 if [ -f $USERCONF ]
 then
 	source $USERCONF
 else
-	cp $USERCONFTEMPLATE $USERCONF
-	echo "Please configure your $USERCONF"
+	cp /usr/share/backup-tools/backup-tools.conf ~/.backup-tools.conf
+	if [ $? == 0 ]
+		then
+		echo "Please configure your $USERCONF"
+	fi
 	exit 1
 fi
 
@@ -45,11 +53,11 @@ then
 	logger `hostname` Inizio rsync di $SORGENTE -t $TAG
 
 	# Opzione --delete
-	if [ "$1" == "--delete" ]
+	if [ "$1" == "--delete" ] || [ "$3" == "--delete" ]
 	then
-		logger `hostname` richiesta opzione --delete
+		logger `hostname` richiesta opzione delete
 		echo Eseguo il backup con --delete....
-		DELETE=$1
+		DELETE="--delete"
 	else
 		DELETE=""
 	fi
