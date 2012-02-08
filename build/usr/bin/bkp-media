@@ -60,9 +60,16 @@ then
 	# Opzione --delete
 	if [ "$1" == "--delete" ] || [ "$3" == "--delete" ]
 	then
+		echo Richiesta opzione delete sul comando rsync...
+		echo Verifico se questo è consentito dalle configurazioni globali...
 		logger `hostname` richiesta opzione delete
-		echo Eseguo il backup con --delete....
-		DELETE="--delete"
+		if [ $RSYNC_CAN_DELETE == "true" ]
+		then
+			echo Eseguo il backup con --delete....
+			DELETE="--delete"
+		else
+			echo "### WARNING: Le configurazioni globali impediscono il delete su rsync"
+		fi
 	else
 		DELETE=""
 	fi
