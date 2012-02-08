@@ -21,9 +21,7 @@
 # License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 ###########################################################################
 
-# Posizione del template dal quale viene generato il file utente
-# Si potrebbe prevedere un file di configurazione globale
-#CONFTEMPLATE="/usr/share/backup-tools/backup-tools.conf"
+# Carica il file di configurazione globale
 source /etc/backup-tools.conf
 
 # L'opzione -u seguita dal nome utente deve essere aggiunta 
@@ -63,12 +61,16 @@ then
 		echo Richiesta opzione delete sul comando rsync...
 		echo Verifico se questo è consentito dalle configurazioni globali...
 		logger `hostname` richiesta opzione delete
+
+		# Verifica che nelle configurazioni globali l'esecuzione di --delete, potenzialmente
+		# richiosa, sia consentita
 		if [ $RSYNC_CAN_DELETE == "true" ]
 		then
 			echo Eseguo il backup con --delete....
 			DELETE="--delete"
 		else
 			echo "### WARNING: Le configurazioni globali impediscono il delete su rsync"
+			DELETE=""
 		fi
 	else
 		DELETE=""
