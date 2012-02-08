@@ -1,25 +1,21 @@
 #!/bin/bash
-# ====================================================
+# =================================================================
 # bkp - Smple script for you backup
-# ====================================================
+# =================================================================
 # @authors: Massimo Barbieri (massimo@fsfe.org)
 #           (Add your name if you contribute)
 # @Mantainer: Massimo Barbieri (massimo@fsfe.org) 
-# @copyright 2011
-# ====================================================
-# This library is free software; you can redistribute it and/or
+# @copyright 2011 GNU GPLv3
+# =================================================================
+# This script is free software; you can redistribute it and/or
 # modify it under the terms of the GNU GENERAL PUBLIC LICENSE
 # License as published by the Free Software Foundation; either 
 # version 3 of the License, or any later version.
 # 
-# This library is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU AFFERO GENERAL PUBLIC LICENSE for more details.
-#  
 # You should have received a copy of the GNU Lesser General Public 
-# License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-###########################################################################
+# License along with this library.
+# If not, see <http://www.gnu.org/licenses/>.
+###################################################################
 
 # Carica il file di configurazione globale
 source /etc/backup-tools.conf
@@ -63,7 +59,7 @@ then
 		logger `hostname` richiesta opzione delete
 
 		# Verifica che nelle configurazioni globali l'esecuzione di --delete, potenzialmente
-		# richiosa, sia consentita
+		# rischiosa, sia consentita
 		if [ $RSYNC_CAN_DELETE == "true" ]
 		then
 			echo Eseguo il backup con --delete....
