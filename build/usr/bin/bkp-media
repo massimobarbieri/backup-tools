@@ -23,8 +23,17 @@
 
 # Questo è il file di configurazione principale
 # TODO: Dovrei fare un file di configurazione utente
-SYSCONF="/etc/backup-tools.conf"
-source $SYSCONF
+#SYSCONF="/etc/backup-tools.conf"
+USERCONFTEMPLATE="/usr/share/backup-tools/backup-tools.conf"
+USERCONF="~/.backup-tools.conf"
+if [ -f $USERCONF ]
+then
+	source $USERCONF
+else
+	cp $USERCONFTEMPLATE $USERCONF
+	echo "Please configure your $USERCONF"
+	exit 1
+fi
 
 
 # VERIFICA CHE IL DISCO E' MONTATO
