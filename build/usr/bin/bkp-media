@@ -27,7 +27,7 @@ if [ "$1" == "-u" ]
 then
 	USERCONF="/home/$2/.backup-tools.conf"
 else
-	USERCONF="~/.backup-tools.conf"
+	USERCONF=$(file ~/.backup-tools.conf | awk '{print $1}' | sed s/://)
 fi
 
 if [ -f $USERCONF ]
