@@ -28,7 +28,7 @@ if [ "$1" == "-u" ]
 then
 	USERCONF="/home/$2/.backup-tools.conf"
 else
-	USERCONF="~/.backup-tools.conf"
+	USERCONF=$(echo $HOME/.backup-tools.conf)
 fi
 
 if [ -f $USERCONF ]
