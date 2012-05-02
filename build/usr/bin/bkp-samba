@@ -45,31 +45,26 @@ fi
 
 logger `hostname` esecuzione di bkp-samba -t $TAG 
 
-if [ -d $SAMBAMOUNT ]
-then
-        echo La directory nella quale montare il server è presente...
-        # Non fare niente
-else
-        echo Creo la directory nella quale montare il server
-        mkdir $SAMBAMOUNT
-fi
-
-logger `hostname` monto $SAMBASHARE
 
 # TODO: Aggiungere qualche controllo
-#smbmount $SAMBASHARE $SAMBAMOUNT -o credentials=$SAMBACREDENTIAL
+gvfs-mount smb://$SAMBAUSER@$SAMBASERVER/$SAMBASHARE
 
-mount -t smbfs $SAMBASHARE $SAMBAMOUNT -o credentials=$SAMBACREDENTIAL
+GVFSFOLDER=$(echo $HOME/.gvfs/$SAMBAUSER su $SAMBASERVER/)
 
-
-if mount|grep $SAMBAMOUNT
-then
-	logger `hostname` inizio il backup di $SORGENTE su $SAMBASHARE
+#if mount|grep $SAMBAMOUNT
+#then
+	logger `hostname` inizio il backup di $SORGENTE su $GVFSFOLDER=
 
 	#TODO: Aggiungere controllo su --exclude-from
-	rsync -av $SORGENTE $SAMBAMOUNT
+	if [ $EXCLUDE ]
+	then
+		echo Eseguo con exclude
+		rsync -av $DELETE --exclude-from=$EXCLUDE --temp-dir=$TMPDIR $SORGENTE "$GVFSFOLDER"
+	else
+		rsync -av $DELETE --temp-dir=$TMPDIR $SORGENTE "$GVFSFOLDER"
+	fi
 	RSYNCERR=$?
-	logger `hostname` fine backup di $SORGENTE su $SAMBASHARE rsync $RSYNCERR
+	logger `hostname` fine backup di $SORGENTE su $GVFSFOLDER rsync $RSYNCERR
 
-	umount $SAMBAMOUNT
-fi
+	gvfs-mount -u smb://$SAMBAUSER@$SAMBASERVER/$SAMBASHARE
+#fi
