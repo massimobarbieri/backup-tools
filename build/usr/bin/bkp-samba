@@ -57,7 +57,9 @@ fi
 logger `hostname` monto $SAMBASHARE
 
 # TODO: Aggiungere qualche controllo
-smbmount $SAMBASHARE $SAMBAMOUNT -o credentials=$SAMBACREDENTIAL
+#smbmount $SAMBASHARE $SAMBAMOUNT -o credentials=$SAMBACREDENTIAL
+
+mount -t smbfs $SAMBASHARE $SAMBAMOUNT -o credentials=$SAMBACREDENTIAL
 
 
 if mount|grep $SAMBAMOUNT
