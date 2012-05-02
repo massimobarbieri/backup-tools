@@ -59,9 +59,9 @@ GVFSFOLDER=$(echo $HOME/.gvfs/$SAMBAUSER su $SAMBASERVER/)
 	if [ $EXCLUDE ]
 	then
 		echo Eseguo con exclude
-		rsync -av $DELETE --exclude-from=$EXCLUDE --temp-dir=$TMPDIR $SORGENTE "$GVFSFOLDER"
+		rsync -rltzuv $DELETE --exclude-from=$EXCLUDE --temp-dir=$TMPDIR $SORGENTE "$GVFSFOLDER"
 	else
-		rsync -av $DELETE --temp-dir=$TMPDIR $SORGENTE "$GVFSFOLDER"
+		rsync -rltzuv $DELETE --temp-dir=$TMPDIR $SORGENTE "$GVFSFOLDER"
 	fi
 	RSYNCERR=$?
 	logger `hostname` fine backup di $SORGENTE su $GVFSFOLDER rsync $RSYNCERR
