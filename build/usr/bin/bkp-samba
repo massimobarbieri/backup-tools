@@ -51,8 +51,8 @@ gvfs-mount smb://$SAMBAUSER@$SAMBASERVER/$SAMBASHARE
 
 GVFSFOLDER=$(echo $HOME/.gvfs/$SAMBAUSER su $SAMBASERVER/)
 
-#if mount|grep $SAMBAMOUNT
-#then
+if [ -d "$GVFSFOLDER" ]
+then
 	logger `hostname` inizio il backup di $SORGENTE su $GVFSFOLDER=
 
 	#TODO: Aggiungere controllo su --exclude-from
@@ -67,4 +67,9 @@ GVFSFOLDER=$(echo $HOME/.gvfs/$SAMBAUSER su $SAMBASERVER/)
 	logger `hostname` fine backup di $SORGENTE su $GVFSFOLDER rsync $RSYNCERR
 
 	gvfs-mount -u smb://$SAMBAUSER@$SAMBASERVER/$SAMBASHARE
-#fi
+
+	exit 0
+else
+	logger `hostname` non sono riuscito a montare la directory gvfs
+	exit 2
+fi
