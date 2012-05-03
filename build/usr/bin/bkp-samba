@@ -94,6 +94,20 @@ then
 
 	echo "Backup completato (Errori $RSYNCERR)"
 
+	if [ $MAILME == "true" ]
+	then
+		echo "Email option enabled..."
+
+		if [ $RSYNCERR != 0 ]
+		then
+			echo "Invio email con errori...."
+		elif [ $MAILME_ERRORS_ONLY != "true" ]
+		then
+			echo "Invio email...."
+		fi
+		 
+	fi
+
 	exit 0
 else
 	logger `hostname` non sono riuscito a montare la directory gvfs
