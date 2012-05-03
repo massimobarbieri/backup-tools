@@ -56,6 +56,28 @@ then
 	echo "La cartella è montata inizio il backup..."
 	logger `hostname` inizio il backup di $SORGENTE su $GVFSFOLDER
 
+
+	# Opzione --delete
+	if [ "$1" == "--delete" ] || [ "$3" == "--delete" ]
+	then
+		echo Richiesta opzione delete sul comando rsync...
+		echo Verifico se questo è consentito dalle configurazioni globali...
+		logger `hostname` richiesta opzione delete
+
+		# Verifica che nelle configurazioni globali l'esecuzione di --delete, potenzialmente
+		# rischiosa, sia consentita
+		if [ $RSYNC_CAN_DELETE == "true" ]
+		then
+			echo Eseguo il backup con --delete....
+			DELETE="--delete"
+		else
+			echo "### WARNING: Le configurazioni globali impediscono il delete su rsync"
+			DELETE=""
+		fi
+	else
+		DELETE=""
+	fi
+
 	# Controlla se è abilitata l'opzione --exclude
 	if [ $EXCLUDE ]
 	then
