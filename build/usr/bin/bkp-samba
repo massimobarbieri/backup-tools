@@ -46,7 +46,6 @@ fi
 logger `hostname` esecuzione di bkp-samba -t $TAG 
 
 
-# TODO: Aggiungere qualche controllo
 echo "monto la cartella smb://$SAMBAUSER@$SAMBASERVER/$SAMBASHARE"
 gvfs-mount smb://$SAMBAUSER@$SAMBASERVER/$SAMBASHARE
 
@@ -54,22 +53,24 @@ GVFSFOLDER=$(echo $HOME/.gvfs/$SAMBAUSER su $SAMBASERVER/)
 
 if [ -d "$GVFSFOLDER" ]
 then
+	echo "La cartella è montata inizio il backup..."
 	logger `hostname` inizio il backup di $SORGENTE su $GVFSFOLDER
 
 	# Controlla se è abilitata l'opzione --exclude
 	if [ $EXCLUDE ]
 	then
-		echo Eseguo con exclude
+		echo Eseguo lo script con exclude
 		rsync -rltzuv $DELETE --exclude-from=$EXCLUDE --temp-dir=$TMPDIR $SORGENTE "$GVFSFOLDER"
 	else
 		rsync -rltzuv $DELETE --temp-dir=$TMPDIR $SORGENTE "$GVFSFOLDER"
 	fi
 	RSYNCERR=$?
-	#TODO: non viene scritto questo log
 	logger `hostname` fine backup di $SORGENTE su $GVFSFOLDER rsync $RSYNCERR
 
 	echo "Smonto la cartella smb://$SAMBAUSER@$SAMBASERVER/$SAMBASHARE"
 	gvfs-mount -u smb://$SAMBAUSER@$SAMBASERVER/$SAMBASHARE
+
+	echo "Backup completato (Errori $RSYNCERR)"
 
 	exit 0
 else
