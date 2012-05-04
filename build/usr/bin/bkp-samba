@@ -82,7 +82,7 @@ then
 	if [ $EXCLUDE ]
 	then
 		echo Eseguo lo script con exclude
-		rsync -rltzuv $DELETE --exclude-from=$EXCLUDE --temp-dir=$TMPDIR $SORGENTE "$GVFSFOLDER"
+		rsync -rltzuv $DELETE --exclude-from=$EXCLUDE --temp-dir=$TMPDIR $SORGENTE "$GVFSFOLDER" > $RSYNCLOG
 	else
 		rsync -rltzuv $DELETE --temp-dir=$TMPDIR $SORGENTE "$GVFSFOLDER"
 	fi
@@ -98,12 +98,16 @@ then
 	then
 		echo "Email option enabled..."
 
+		SUBJECT="Backup-tools notification"
+
 		if [ $RSYNCERR != 0 ]
 		then
 			echo "Invio email con errori...."
+			echo mail -s "$SUBJECT" "$MYMAIL" < $RSYNCLOG
 		elif [ $MAILME_ERRORS_ONLY != "true" ]
 		then
 			echo "Invio email...."
+			echo mail -s "$SUBJECT" "$MYMAIL" < $RSYNCLOG
 		fi
 		 
 	fi
