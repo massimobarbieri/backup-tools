@@ -43,6 +43,13 @@ else
 	exit 1
 fi
 
+if [ $SORGENTEMEDIA ]
+then
+	SORGENTE=$(echo $SORGENTEMEDIA)
+else
+	SORGENTE=$(echo $SORGENTE)
+fi
+
 
 # VERIFICA CHE IL DISCO E' MONTATO
 MOUNTED=$(df | grep $TARGET |awk '{print $6}')

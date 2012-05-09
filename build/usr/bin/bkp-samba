@@ -51,6 +51,13 @@ gvfs-mount smb://$SAMBAUSER@$SAMBASERVER/$SAMBASHARE
 
 GVFSFOLDER=$(echo $HOME/.gvfs/$SAMBAUSER su $SAMBASERVER/)
 
+if [ $SORGENTESAMBA ]
+then
+	SORGENTE=$(echo $SORGENTESAMBA)
+else
+	SORGENTE=$(echo $SORGENTE)
+fi
+
 if [ -d "$GVFSFOLDER" ]
 then
 	echo "La cartella è montata inizio il backup..."
