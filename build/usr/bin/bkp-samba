@@ -49,7 +49,7 @@ logger `hostname` esecuzione di bkp-samba -t $TAG
 echo "monto la cartella smb://$SAMBAUSER@$SAMBASERVER/$SAMBASHARE"
 gvfs-mount smb://$SAMBAUSER@$SAMBASERVER/$SAMBASHARE
 
-GVFSFOLDER=$(echo $HOME/.gvfs/$SAMBAUSER su $SAMBASERVER/)
+GVFSFOLDER=$(echo $HOME/.gvfs/smb-share:server=$SAMBASERVER,share=$SAMBASHARE,user=$SAMBAUSER)
 
 if [ $SORGENTESAMBA ]
 then
