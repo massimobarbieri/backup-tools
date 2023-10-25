@@ -47,7 +47,7 @@ fi
 
 # TODO: Controllare che il server sia accessibile
 # TODO: Aggiungere flag per supporto crittografia
-#	Andra a leggere le variavili sul file di conf
+#	Andra a leggere le variabili sul file di conf
 
 # Comando di backup principale
 rsync -avz -e ssh $SORGENTE $USERNAME@$SERVER:$REMOTEDIR/
