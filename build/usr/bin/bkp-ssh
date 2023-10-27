@@ -22,12 +22,15 @@
 # Carica il file di configurazione globale
 source /etc/backup-tools.conf
 
-# Questo è il file di configurazione principale
+# L'opzione -u seguita dal nome utente deve essere aggiunta 
+# come prima opzione e permette di eseguire il programma usando
+# un'altra configurazione utente
 if [ "$1" == "-u" ]
 then
 	USERCONF="/home/$2/.backup-tools.conf"
 else
-	USERCONF="~/.backup-tools.conf"
+	#USERCONF=$(file ~/.backup-tools.conf | awk '{print $1}' | sed s/://)
+	USERCONF=$(echo $HOME/.backup-tools.conf)
 fi
 
 if [ -f $USERCONF ]
@@ -39,15 +42,29 @@ else
 		then
 		echo "Please configure your $USERCONF"
 	fi
-	exit 1
 fi
 
 
 
 
 # TODO: Controllare che il server sia accessibile
+# Controlla se c'è un server SSH attivo
+timeout 5 bash -c "</dev/tcp/$SERVER/$PORT"
+if [ "$?" == "0" ]
+then 
+	echo "The ssh server $SERVER on port $PORT seemes to be active.."
+	echo "rsync -avz -e ssh $SORGENTE $USERNAME@$SERVER:$REMOTEDIR"
+else
+	echo "The ssh server $SERVER on port $PORT is not active."
+	echo "Check the server status than run again the script."
+	exit 1
+fi
+	
+
 # TODO: Aggiungere flag per supporto crittografia
 #	Andra a leggere le variabili sul file di conf
 
 # Comando di backup principale
-rsync -avz -e ssh $SORGENTE $USERNAME@$SERVER:$REMOTEDIR/
+
+# DEBUG: LA riga seguente è stata commentata per debug
+#rsync -avz -e ssh $SORGENTE $USERNAME@$SERVER:$REMOTEDIR
