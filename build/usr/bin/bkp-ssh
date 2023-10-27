@@ -46,32 +46,41 @@ fi
 
 
 
-
-# TODO: Controllare che il server sia accessibile
 # Controlla se c'è un server SSH attivo
 timeout 5 bash -c "</dev/tcp/$SERVER/$PORT"
 if [ "$?" == "0" ]
 then 
-	echo "The ssh server $SERVER on port $PORT seemes to be active.."
-	sleep 1
-	echo "Now we need to control if remote directory exists on server..."
-	sleep 1
-	ssh $USERNAME@$SERVER "[ -d $REMOTEDIR ]"
-	echo "Remote directory $REMOTEDIR exists on server $SERVER"
-	if [ "$?" == "0" ]
-	then
-		echo "Starting backup....."
-		#DEBUG: Commentata per sicurezza
-		echo "rsync -avz -e ssh $SORGENTE $USERNAME@$SERVER:$REMOTEDIR"
-	else
-		exit 1
-	fi
+	ACTIVESERVER="Yes"
 else
-	echo "The ssh server $SERVER on port $PORT is not active."
-	echo "Check the server status than run again the script."
+	ACTIVESERVER="No"
+fi
+
+# Controlla se la cartella remota esiste
+ssh $USERNAME@$SERVER "[ -d $REMOTEDIR ]"
+if [ "$?" == "0" ]
+then
+	ACTIVEREMOTEDIR="Yes"
+else
+	ACTIVEREMOTEDIR="No"
+fi
+
+
+# Se i controlli sopra vanno a buon fine decide se eseguire il backup
+if [ "$ACTIVESERVER" == "Yes" ] && [ "$ACTIVEREMOTEDIR" == "Yes" ]
+then
+	echo "The SSH server $SERVER is active and remote directory $REMOTEDIR exists!"
+	echo "Starting backup now!"
+	#DEBUG: Commentata per sicurezza
+	echo "rsync -avz -e ssh $SORGENTE $USERNAME@$SERVER:$REMOTEDIR"
+else
+	echo "Remote SSH server gives the following output:"
+	echo "SSH server is active = $ACTIVESERVER"
+	echo "Remote dir exists = $ACTIVEREMOTEDIR"
+	echo "Exit with errors"
 	exit 1
 fi
-	
+
+# TODO: Inserire logger
 
 # TODO: Aggiungere flag per supporto crittografia
 #	Andra a leggere le variabili sul file di conf
