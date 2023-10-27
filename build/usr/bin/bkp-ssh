@@ -70,6 +70,9 @@ if [ "$ACTIVESERVER" == "Yes" ] && [ "$ACTIVEREMOTEDIR" == "Yes" ]
 then
 	echo "The SSH server $SERVER is active and remote directory $REMOTEDIR exists!"
 	echo "Starting backup now!"
+	logger `hostname` The SSH server $SERVER is active -t $TAG
+	logger `hostname` Starting backup of $SORGENTE over $SERVER:$REMOTEDIR -t $TAG
+	
 	#DEBUG: Commentata per sicurezza
 	echo "rsync -avz -e ssh $SORGENTE $USERNAME@$SERVER:$REMOTEDIR"
 else
@@ -77,10 +80,10 @@ else
 	echo "SSH server is active = $ACTIVESERVER"
 	echo "Remote dir exists = $ACTIVEREMOTEDIR"
 	echo "Exit with errors"
+	logger `hostname` Backup failed with errors. Active server is $ACTIVESERVER -t $TAG
+	logger `hostname` Backup failed with errors. Active remote dir is $ACTIVEREMOTEDIR -t $TAG
 	exit 1
 fi
-
-# TODO: Inserire logger
 
 # TODO: Aggiungere flag per supporto crittografia
 #	Andra a leggere le variabili sul file di conf
