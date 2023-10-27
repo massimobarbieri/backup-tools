@@ -53,7 +53,19 @@ timeout 5 bash -c "</dev/tcp/$SERVER/$PORT"
 if [ "$?" == "0" ]
 then 
 	echo "The ssh server $SERVER on port $PORT seemes to be active.."
-	echo "rsync -avz -e ssh $SORGENTE $USERNAME@$SERVER:$REMOTEDIR"
+	sleep 1
+	echo "Now we need to control if remote directory exists on server..."
+	sleep 1
+	ssh $USERNAME@$SERVER "[ -d $REMOTEDIR ]"
+	echo "Remote directory $REMOTEDIR exists on server $SERVER"
+	if [ "$?" == "0" ]
+	then
+		echo "Starting backup....."
+		#DEBUG: Commentata per sicurezza
+		echo "rsync -avz -e ssh $SORGENTE $USERNAME@$SERVER:$REMOTEDIR"
+	else
+		exit 1
+	fi
 else
 	echo "The ssh server $SERVER on port $PORT is not active."
 	echo "Check the server status than run again the script."
