@@ -89,6 +89,46 @@ then
 		rsync -av $DELETE $SORGENTE $TARGET/
 	fi
 
+
+
+	# If history set to Yes create ahistory backup with hardlinks
+	if [ $HISTORY == "Yes" ]
+	then
+		echo "* Controllo se la directory dello storico odierno è presente..."
+		if [ -d $TARGET$SORGENTE-$(date +%Y%m%d) ]
+		then
+			echo "* La directory dello storico odierno è presente!"
+			echo "* La rimuovo la directory $TARGET$SORGENTE-$(date +%Y%m%d) ..."
+			rm -rf $TARGET$SORGENTE-$(date +%Y%m%d)
+
+		fi
+
+		# Crea una copia con hardlink e indicazione della data
+		echo "* Eseguo una copia del backup per creare uno storico."
+		echo "  Questa operazione potrebbe richiedere un po' di tempo..."
+		cp -al $TARGET$SORGENTE $TARGET$SORGENTE-$(date +%Y%m%d)
+
+		# Questa variabile l'ho inserita per concatenare il numero di giorni
+		# all'opzione days del comando date. Forse c'è un modo migliore
+		# TODO: Migliorare
+		days="days"
+
+		# Elimina il backup più vecchio di $DAYS giorno se esiste
+		# Andrebbe migliorato che elimini il backup più vecchio di tale
+		# data nel caso non abbia fatto il backup
+		BACKUPTODELETE=$TARGET$SORGENTE-$(date -d $(date +%Y%m%d)-$DAYS$days +%Y%m%d)
+		echo "* Controllo se $BACKUPTODELETE è presente"
+		if [ -d $BACKUPTODELETE ]
+		then
+			echo "* Rimuovo il backup più vecchio di $DAYS giorni"
+			echo "* Rimuovo: $TARGET$SORGENTE-$(date -d $(date +%Y%m%d)-$DAYS$days +%Y%m%d)"
+			rm -rf $TARGET$SORGENTE-$(date -d $(date +%Y%m%d)-$DAYS$days +%Y%m%d)
+		fi
+	fi
+
+
+
+
 	RSYNCERR=$?
 	# Scrivo il log
 	logger Fine backup per `hostname` rsync ha restituito $RSYNCERR -t $TAG
