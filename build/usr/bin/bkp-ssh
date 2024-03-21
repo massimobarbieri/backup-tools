@@ -1,6 +1,6 @@
 #!/bin/bash
 # ==================================================================
-# bkp - Smple script for you backup
+# bkp-ssh - Smple script for you backup
 # ==================================================================
 # @authors: Massimo Barbieri (massimo@fsfe.org)
 #           (Add your name if you contribute)
@@ -69,9 +69,40 @@ then
 	echo "Starting backup now!"
 	logger `hostname` The SSH server $SERVER is active -t $TAG
 	logger `hostname` Starting backup of $SORGENTE over $SERVER:$REMOTEDIR -t $TAG
+
+	# opzione --delete
+	if [ "$1" == "--delete" ] || [ "$3" == "--delete" ]
+	then
+		echo Richiesta opzione delete sul comando rsync...
+		echo Verifico se questo è consentito dalle configurazioni globali...
+		logger `hostname` richiesta opzione delete
+
+		# Verifica che nelle configurazioni globali l'esecuzione di --delete, potenzialmente
+		# rischiosa, sia consentita
+		if [ $RSYNC_CAN_DELETE == "true" ]
+		then
+			echo Eseguo il backup con --delete....
+			DELETE="--delete"
+		else
+			echo "### WARNING: Le configurazioni globali impediscono il delete su rsync"
+			DELETE=""
+		fi
+	else
+		DELETE=""
+	fi
+
 	
-	#DEBUG: Commentata per sicurezza
-	echo "rsync -avz -e ssh $SORGENTE $USERNAME@$SERVER:$REMOTEDIR"
+	if [ $EXCLUDE ]
+	then
+		echo Eseguo con exclude
+		#rsync -av $DELETE --exclude-from=$EXCLUDE $SORGENTE $TARGET/
+		echo "rsync -avz -e ssh $DELETE --exclude-from=$EXCLUDE $SORGENTE $USERNAME@$SERVER:$REMOTEDIR"
+	else
+		echo Eseguo senza exclude
+		rsync -avz -e ssh $DELETE $SORGENTE $USERNAME@$SERVER:$REMOTEDIR
+	fi
+
+	#rsync -avz -e ssh $SORGENTE $USERNAME@$SERVER:$REMOTEDIR
 else
 	echo "Remote SSH server gives the following output:"
 	echo "Remote dir exists = $ACTIVEREMOTEDIR"

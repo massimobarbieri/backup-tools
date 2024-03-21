@@ -1,6 +1,6 @@
 #!/bin/bash
 # =================================================================
-# bkp - Smple script for you backup
+# bkp-media - Smple script for you backup
 # =================================================================
 # @authors: Massimo Barbieri (massimo@fsfe.org)
 #           (Add your name if you contribute)
@@ -59,7 +59,7 @@ then
 	echo "Il disco è montato: eseguo il backup"
 	logger `hostname` Inizio rsync di $SORGENTE -t $TAG
 
-	# Opzione --delete
+	# opzione --delete
 	if [ "$1" == "--delete" ] || [ "$3" == "--delete" ]
 	then
 		echo Richiesta opzione delete sul comando rsync...
