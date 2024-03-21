@@ -45,16 +45,6 @@ else
 fi
 
 
-#Commento perché il controllo successivo dovrebbe essere sufficiente
-# Controlla se c'è un server SSH attivo
-#timeout 5 bash -c "</dev/tcp/$SERVER/$PORT"
-#if [ "$?" == "0" ]
-#then 
-#	ACTIVESERVER="Yes"
-#else
-#	ACTIVESERVER="No"
-#fi
-
 # Controlla se la cartella remota esiste
 ssh $USERNAME@$SERVER "[ -d $REMOTEDIR ]"
 if [ "$?" == "0" ]
@@ -77,7 +67,6 @@ then
 	echo "rsync -avz -e ssh $SORGENTE $USERNAME@$SERVER:$REMOTEDIR"
 else
 	echo "Remote SSH server gives the following output:"
-	echo "SSH server is active = $ACTIVESERVER"
 	echo "Remote dir exists = $ACTIVEREMOTEDIR"
 	echo "Exit with errors"
 	logger `hostname` Backup failed with errors. Active server is $ACTIVESERVER -t $TAG
