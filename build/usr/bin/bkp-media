@@ -110,7 +110,11 @@ then
 
 		# Questa variabile l'ho inserita per concatenare il numero di giorni
 		# all'opzione days del comando date. Forse c'è un modo migliore
-		# TODO: Migliorare
+		# TODO: Migliorare - lo script ora elimina la cartella più vecchia
+		# esattamente di $DAYS ma non elimina le cartelle ancora più vecchie.
+		# In altre parole: viene eliminata la cartella date-$DAYS invece sarebbe
+		# più opportuno che eliminasse le cartelle <= di date-$DAYS poiché se si
+		# salta un giorno di backup potrebbero rimanere delle cartelle vacchie
 		days="days"
 
 		# Elimina il backup più vecchio di $DAYS giorno se esiste
