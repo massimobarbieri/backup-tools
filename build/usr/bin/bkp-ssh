@@ -44,6 +44,13 @@ else
 	fi
 fi
 
+if [ $SORGENTESSH ]
+then
+	SORGENTE=$(echo $SORGENTESSH)
+else
+	SORGENTE=$(echo $SORGENTE)
+fi
+
 
 # Controlla se la cartella remota esiste
 ssh $USERNAME@$SERVER "[ -d $REMOTEDIR ]"
