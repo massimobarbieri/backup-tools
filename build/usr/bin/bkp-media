@@ -108,6 +108,7 @@ then
 		echo "  Questa operazione potrebbe richiedere un po' di tempo..."
 		cp -al $TARGET$SORGENTE $TARGET$SORGENTE-$(date +%Y%m%d)
 
+# VERSIONE PRECEDENTE DEL CODICE: ELIMINA SOLO UNA CARTELLA PIÙ VECCHIA DI $DAYS----------------------------
 		# Questa variabile l'ho inserita per concatenare il numero di giorni
 		# all'opzione days del comando date. Forse c'è un modo migliore
 		# TODO: Migliorare - lo script ora elimina la cartella più vecchia
@@ -115,10 +116,9 @@ then
 		# In altre parole: viene eliminata la cartella date-$DAYS invece sarebbe
 		# più opportuno che eliminasse le cartelle <= di date-$DAYS poiché se si
 		# salta un giorno di backup potrebbero rimanere delle cartelle vacchie
-		days="days"
+#		days="days"
 
 
-# VERSIONE PRECEDENTE DEL CODICE: ELIMINA SOLO UNA CARTELLA PIÙ VECCHIA DI $DAYS----------------------------
 		# Elimina il backup più vecchio di $DAYS giorno se esiste
 		# Andrebbe migliorato che elimini il backup più vecchio di tale
 		# data nel caso non abbia fatto il backup
@@ -142,7 +142,7 @@ then
     		# Estraiamo la data dalla parte finale del nome della cartella
     		dir_date=$(echo "$dir" | grep -oE '[0-9]{8}$')
 		#DEBUG:
-		#echo "* Controllo se $dir è più vecchia di $DAYS giorni"
+		echo "* Controllo se $dir è più vecchia di $DAYS giorni"
 
     		# Controlliamo se la data estratta è più vecchia di 30 giorni rispetto alla data attuale
     			if [[ "$dir_date" < "$OLD_DATE" ]]; then
