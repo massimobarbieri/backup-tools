@@ -141,6 +141,8 @@ then
 		for dir in $TARGET$SORGENTE-*; do
     		# Estraiamo la data dalla parte finale del nome della cartella
     		dir_date=$(echo "$dir" | grep -oE '[0-9]{8}$')
+		#DEBUG:
+		#echo "* Controllo se $dir è più vecchia di $DAYS giorni"
 
     		# Controlliamo se la data estratta è più vecchia di 30 giorni rispetto alla data attuale
     			if [[ "$dir_date" < "$OLD_DATE" ]]; then
