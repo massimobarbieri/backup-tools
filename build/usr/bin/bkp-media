@@ -117,17 +117,39 @@ then
 		# salta un giorno di backup potrebbero rimanere delle cartelle vacchie
 		days="days"
 
+
+# VERSIONE PRECEDENTE DEL CODICE: ELIMINA SOLO UNA CARTELLA PIÙ VECCHIA DI $DAYS----------------------------
 		# Elimina il backup più vecchio di $DAYS giorno se esiste
 		# Andrebbe migliorato che elimini il backup più vecchio di tale
 		# data nel caso non abbia fatto il backup
-		BACKUPTODELETE=$TARGET$SORGENTE-$(date -d $(date +%Y%m%d)-$DAYS$days +%Y%m%d)
-		echo "* Controllo se $BACKUPTODELETE è presente"
-		if [ -d $BACKUPTODELETE ]
-		then
-			echo "* Rimuovo il backup più vecchio di $DAYS giorni"
-			echo "* Rimuovo: $TARGET$SORGENTE-$(date -d $(date +%Y%m%d)-$DAYS$days +%Y%m%d)"
-			rm -rf $TARGET$SORGENTE-$(date -d $(date +%Y%m%d)-$DAYS$days +%Y%m%d)
-		fi
+#		BACKUPTODELETE=$TARGET$SORGENTE-$(date -d $(date +%Y%m%d)-$DAYS$days +%Y%m%d)
+#		echo "* Controllo se $BACKUPTODELETE è presente"
+#		if [ -d $BACKUPTODELETE ]
+#		then
+#			echo "* Rimuovo il backup più vecchio di $DAYS giorni"
+#			echo "* Rimuovo: $TARGET$SORGENTE-$(date -d $(date +%Y%m%d)-$DAYS$days +%Y%m%d)"
+#			rm -rf $TARGET$SORGENTE-$(date -d $(date +%Y%m%d)-$DAYS$days +%Y%m%d)
+#		fi
+#		--------------------------------------------------------------------------------------------
+	
+
+		#######################################################################################################
+		# Questo dovrebbe permettere di rimuovere il backup di $DAYS giorni fa o quello più vecchio 
+		# Calcoliamo la data $DAYS giorni fa
+		OLD_DATE=$(date -d "$DAYS days ago" +%Y%m%d)
+
+		for dir in $TARGET$SORGENTE-*; do
+    		# Estraiamo la data dalla parte finale del nome della cartella
+    		dir_date=$(echo "$dir" | grep -oE '[0-9]{8}$')
+
+    		# Controlliamo se la data estratta è più vecchia di 30 giorni rispetto alla data attuale
+    			if [[ "$dir_date" < "$OLD_DATE" ]]; then
+        			echo "* Rimuovo: $dir"
+        			# Eliminiamo la cartella
+				rm -rf $dir
+			fi
+		done
+		#######################################################################################################
 	fi
 
 
